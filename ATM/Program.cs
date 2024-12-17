@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
-using ATM;
+using ATM.ConsoleApp;
 
 public class Program
 {
