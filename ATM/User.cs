@@ -13,6 +13,7 @@ public class User
     public string Password { get; set; }
     public double Balance { get; set; }
     public string AccountType { get; set; }
+
     public User(string username, string password)
     {
         this.UserID = Guid.NewGuid().ToString();
