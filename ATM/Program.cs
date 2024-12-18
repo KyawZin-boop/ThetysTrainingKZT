@@ -57,65 +57,68 @@ public class Program
                 }
             }
 
-            Console.WriteLine("Login Success!");
-            Console.WriteLine("-----------------------");
+            ATMFunction(validateUser);
+        }
+    }
+    static void ATMFunction(User user)
+    {
+        Console.WriteLine("Login Success!");
+        Console.WriteLine("-----------------------");
 
-            while (true)
+        while (true)
+        {
+            Console.WriteLine("Please enter the number you want to execute");
+            Console.WriteLine("1. Withdraw");
+            Console.WriteLine("2. Deposit");
+            Console.WriteLine("3. Check Balance");
+            Console.WriteLine("4. Log Out");
+            Console.WriteLine("5. End Program");
+            Console.WriteLine();
+            var userInput = Console.ReadLine();
+
+            switch (userInput)
             {
-                Console.WriteLine("Please enter the number you want to execute");
-                Console.WriteLine("1. Withdraw");
-                Console.WriteLine("2. Deposit");
-                Console.WriteLine("3. Check Balance");
-                Console.WriteLine("4. Log Out");
-                Console.WriteLine("5. End Program");
-                Console.WriteLine();
-                var userInput = Console.ReadLine();
+                case "1":
+                    Console.WriteLine("Please Enter the amount you want to withdraw");
+                    var withdrawAmount = Convert.ToDouble(Console.ReadLine());
+                    if (withdrawAmount > user.Balance)
+                    {
+                        Console.WriteLine("Not enough balance!");
+                    }
+                    user.Balance -= withdrawAmount;
+                    Console.WriteLine("Withdraw Success!");
+                    Console.ReadLine();
+                    break;
 
-                switch (userInput)
-                {
-                    case "1":
-                        Console.WriteLine("Please Enter the amount you want to withdraw");
-                        var withdrawAmount = Convert.ToDouble(Console.ReadLine());
-                        if (withdrawAmount > validateUser.Balance)
-                        {
-                            Console.WriteLine("Not enough balance!");
-                        }
-                        validateUser.Balance -= withdrawAmount;
-                        Console.WriteLine("Withdraw Success!");
-                        Console.ReadLine();
-                        break;
-    
-                    case "2":
-                        Console.WriteLine("Please Enter the amount you want to deposit");
-                        var depositAmount = Convert.ToDouble(Console.ReadLine());
-                        validateUser.Balance += depositAmount;
-                        Console.WriteLine("Withdraw Success!");
-                        Console.ReadLine();
-                        break;
+                case "2":
+                    Console.WriteLine("Please Enter the amount you want to deposit");
+                    var depositAmount = Convert.ToDouble(Console.ReadLine());
+                    user.Balance += depositAmount;
+                    Console.WriteLine("Withdraw Success!");
+                    Console.ReadLine();
+                    break;
 
-                    case "3":
-                        Console.WriteLine($"Your Current Balance = {validateUser.Balance}");
-                        Console.ReadLine();
-                        break;
+                case "3":
+                    Console.WriteLine($"Your Current Balance = {user.Balance}");
+                    Console.ReadLine();
+                    break;
 
-                    case "4":
-                        Console.WriteLine("Log out Success!");
-                        Console.ReadLine();
-                        break;
+                case "4":
+                    Console.WriteLine("Log out Success!");
+                    Console.ReadLine();
+                    break;
 
-                    case "5":
-                        Console.WriteLine("Program Ended");
-                        break;
+                case "5":
+                    Console.WriteLine("Program Ended");
+                    Environment.Exit(0);
+                    break;
 
-                    default:
-                        Console.WriteLine("Invalid Input");
-                        break;
-                }
-
-                if (userInput == "4" || userInput == "5") break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    break;
             }
 
-            break;
+            if (userInput == "4") break;
         }
     }
 }
