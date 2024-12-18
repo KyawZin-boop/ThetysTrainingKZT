@@ -5,24 +5,29 @@ class Program
 {
     static List<Product> Products = new List<Product>
     {
-        new Product{Id = 1, Name = "Apple", Stock = 30, Price = 15, ProfitPerItem = 2},
-        new Product{Id = 2, Name = "Orange", Stock = 50, Price = 10, ProfitPerItem = 1},
-        new Product{Id = 3, Name = "Banana", Stock = 35, Price = 12, ProfitPerItem = 1},
-        new Product{Id = 4, Name = "Pineapple", Stock = 40, Price = 17, ProfitPerItem = 2},
-        new Product{Id = 5, Name = "Papaya", Stock = 30, Price = 11, ProfitPerItem = 3},
+        new Product{Id = 1, Name = "Apple", Stock = 30, Price = 800, ProfitPerItem = 200},
+        new Product{Id = 2, Name = "Orange", Stock = 50, Price = 500, ProfitPerItem = 100},
+        new Product{Id = 3, Name = "Banana", Stock = 35, Price = 400, ProfitPerItem = 100},
+        new Product{Id = 4, Name = "Pineapple", Stock = 40, Price = 700, ProfitPerItem = 150},
+        new Product{Id = 5, Name = "Papaya", Stock = 30, Price = 800, ProfitPerItem = 50},
     };
 
     static List<Sale> Cart = new List<Sale>();
+    static List<SaleRecord> saleRecords = new List<SaleRecord>();
+    static double TotalRevenue = 0;
+    static decimal TotalProfit = 0;
 
     static void Main(string[] args)
     {
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine();
             Console.WriteLine("Pls Type the Number to Execute...");
             Console.WriteLine("1. Stock Menu");
             Console.WriteLine("2. Cashier Menu");
-            Console.WriteLine("3. Admin Menu");
+            Console.WriteLine("3. Manager Menu");
+            Console.WriteLine("4. End Program");
             var menu = Console.ReadLine();
             Console.WriteLine();
 
@@ -72,8 +77,9 @@ class Program
                         Console.WriteLine("2. Summarizing Order");
                         Console.WriteLine("3. Exit to Menu");
                         var cashierMenu = Console.ReadLine();
+                        Console.WriteLine();
 
-                        switch(cashierMenu)
+                        switch (cashierMenu)
                         {
                             case "1":
                                 AddtoCart();
@@ -88,6 +94,42 @@ class Program
                         }
                         if (cashierMenu == "3") break;
                     }
+                    break;
+
+                case "3":
+                    while (true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("Cashier Menu");
+                        Console.WriteLine("1. View Report");
+                        Console.WriteLine("2. Total Summary");
+                        Console.WriteLine("3. Exit to Menu");
+                        var managerMenu = Console.ReadLine();
+                        Console.WriteLine();
+
+                        switch (managerMenu)
+                        {
+                            case "1":
+                                ShowSaleRecord();
+                                break;
+
+                            case "2":
+                                ShowTotalSummary();
+                                break;
+
+                            case "3":
+                                break;
+                        }
+                        if(managerMenu == "3") break;
+                    }
+                    break;
+
+                case "4":
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid Input");
                     break;
 
             }
@@ -177,7 +219,7 @@ class Program
 
     static void AddtoCart()
     {
-        while(true)
+        while (true)
         {
             ShowProduct();
             Console.WriteLine("Please Enter the product ID");
@@ -206,7 +248,7 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("Invalid quantity.");
+                    Console.WriteLine("Not Enough Item in Stock.");
                 }
             }
             else
@@ -235,22 +277,68 @@ class Program
         Console.WriteLine();
         Console.WriteLine("Enter (y) to Finalize the Transaction");
         var input = Console.ReadLine();
-        if(input == "y")
+        if (input == "y")
         {
             double totalPrice = 0;
-            foreach(var item in Cart)
+            foreach (var item in Cart)
             {
-                 totalPrice += (item.Price * item.Quantity);
+                totalPrice += (item.Price * item.Quantity);
+                saleRecords.Add(new SaleRecord
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    SellingPrice = item.Price,
+                    Profit = item.Profit
+                });
+                var product = Products.FirstOrDefault(x => x.Id == item.ProductId);
+                product!.Stock -= item.Quantity;
+                TotalRevenue += item.TotalAmount;
+                TotalProfit += item.Profit;
             }
 
-            Console.WriteLine($"Your Total Amount : {totalPrice}/n");
+            Console.WriteLine($"Your Total Amount : ${totalPrice}");
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Press Enter to Exist.");
             Console.ReadLine();
         }
     }
 
-    static void StoreSalesRecord()
+    static void ShowSaleRecord()
     {
+        Console.WriteLine();
+        Console.WriteLine("{0,-20} {1,-20} {2,-10} {3,-20} {4,-10}", "ProductID", "ProductName", "Quantity", "SellingPrice", "Profit");
+        Console.WriteLine(new string('-', 80));
 
+        Console.ForegroundColor = ConsoleColor.Green;
+        if (saleRecords.Count > 0)
+        {
+            foreach (var record in saleRecords)
+            {
+                Console.WriteLine("{0,-20} {1,-20} {2,-10} {3,-20} {4,-10:C}",
+                    record.ProductId, record.ProductName, record.Quantity, record.SellingPrice, record.Profit); ;
+            }
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("There's no Record Yet!");
+        }
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("Press Enter to Exit.");
+        Console.ReadLine();
+    }
+
+    static void ShowTotalSummary()
+    {
+        Console.WriteLine();
+        Console.WriteLine("{0,-20} {1,-20}", "TotalRevenue", "TotalProfit");
+        Console.WriteLine(new string('-', 40));
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("{0,-20} {1,-20:C}", TotalRevenue, TotalProfit);
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("Press Enter to Exit");
+        Console.ReadLine();
     }
 }
