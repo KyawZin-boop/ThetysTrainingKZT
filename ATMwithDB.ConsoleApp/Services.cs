@@ -68,6 +68,7 @@ public class Services
                     _db.Entry(getUser).State = EntityState.Modified;
                     _db.TransactionHistory.Add(new Transaction
                     {
+                        UserId = getUser.UserID,
                         TransactionType = "Withdraw",
                         Amount = withdrawAmount,
                         Date = DateTime.Now,
@@ -87,6 +88,7 @@ public class Services
                     _db.Entry(getUser).State = EntityState.Modified;
                     _db.TransactionHistory.Add(new Transaction
                     {
+                        UserId = getUser.UserID,
                         TransactionType = "Deposit",
                         Amount = depositAmount,
                         Date = DateTime.Now,
