@@ -36,10 +36,10 @@ public class Program
 
             var validateUser = users.Find(x => x.UserName == username && x.Password == password);
 
-            if ( validateUser is null)
+            if (validateUser is null)
             {
                 var validateName = users.Find(x => x.UserName == username);
-                if(validateName is null)
+                if (validateName is null)
                 {
                     Console.WriteLine("There is No User with this name!");
                     continue;
@@ -94,7 +94,7 @@ public class Program
                     Console.WriteLine("Please Enter the amount you want to deposit");
                     var depositAmount = Convert.ToDouble(Console.ReadLine());
                     user.Balance += depositAmount;
-                    Console.WriteLine("Withdraw Success!");
+                    Console.WriteLine("Deposit Success!");
                     Console.ReadLine();
                     break;
 

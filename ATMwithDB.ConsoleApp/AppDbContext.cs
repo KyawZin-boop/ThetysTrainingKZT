@@ -27,8 +27,8 @@ public class User
 {
     [Key]
     public Guid? UserID { get; set; }
-    public string? UserName { get; set; }
-    public string? Password { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
     public decimal? Balance { get; set; }
     public bool? ActiveFlag { get; set; }
     public DateTime? CreatedAt { get; set; } = DateTime.Now;
@@ -39,8 +39,8 @@ public class User
 public class Transaction
 {
     [Key]
-    public string? TransactionID { get; set; }
+    public Guid? TransactionID { get; set; } = Guid.NewGuid();
     public string? TransactionType { get; set; }
     public decimal? Amount { get; set; }
-    public DateTime? CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? Date { get; set; } = DateTime.Now;
 }
