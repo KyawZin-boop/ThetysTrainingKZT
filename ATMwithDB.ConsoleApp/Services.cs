@@ -37,7 +37,7 @@ public class Services
     public void ATMFunction(User user)
     {
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Login Success!");
+        Console.WriteLine("\nLogin Success!");
         Console.WriteLine("-----------------------");
 
         while (true)
@@ -100,7 +100,9 @@ public class Services
                     break;
 
                 case "3":
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"Your Current Balance = {getUser!.Balance}");
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.ReadLine();
                     break;
 
@@ -112,6 +114,7 @@ public class Services
                     break;
 
                 case "5":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine("Program Ended");
                     Environment.Exit(0);
                     break;
