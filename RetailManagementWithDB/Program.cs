@@ -22,9 +22,10 @@ while (true)
                 Console.WriteLine("\nPODUCT MENU");
                 Console.WriteLine("Pls Type the Number to Execute...");
                 Console.WriteLine("1. Product Inventory");
-                Console.WriteLine("2. Edit Product");
-                Console.WriteLine("3. Add New Product");
-                Console.WriteLine("4. Exit to Menu");
+                Console.WriteLine("2. Delete Product");
+                Console.WriteLine("3. Edit Product");
+                Console.WriteLine("4. Add New Product");
+                Console.WriteLine("5. Exit to Menu");
                 var saleMenu = Console.ReadLine();
                 Console.WriteLine();
 
@@ -35,17 +36,21 @@ while (true)
                         break;
 
                     case "2":
-                        service.EditProduct();
+                        service.DeleteProduct();
                         break;
 
                     case "3":
-                        service.AddProduct();
+                        service.EditProduct();
                         break;
 
                     case "4":
+                        service.AddProduct();
+                        break;
+
+                    case "5":
                         break;
                 }
-                if (saleMenu == "4") break;
+                if (saleMenu == "5") break;
             }
             break;
 

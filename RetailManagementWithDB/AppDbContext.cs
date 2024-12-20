@@ -43,6 +43,7 @@ public class Product
     public int Stock { get; set; }
     public decimal Price { get; set; }
     public decimal ProfitPerItem { get; set; }
+    public bool ActiveFlag { get; set; } = true;
 }
 
 [Table("Tbl_SaleReport")]

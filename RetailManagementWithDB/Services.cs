@@ -18,7 +18,7 @@ public class Services
 
     public void ShowProduct()
     {
-        List<Product> products = _db.Products.ToList();
+        List<Product> products = _db.Products.AsNoTracking().Where(x => x.ActiveFlag == true).ToList();
         if (products.Count > 0)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -28,6 +28,27 @@ public class Services
             {
                 Console.WriteLine("{0,-10} {1,-10} {2,-10} {3,-10} {4,-20}", product.ProductCode, product.Name, product.Stock, product.Price, product.ProfitPerItem);
             }
+            Console.ForegroundColor = ConsoleColor.Blue;
+        }
+    }
+
+    public void DeleteProduct()
+    {
+        ShowProduct();
+        Console.WriteLine("Please Enter the Product Code you want to Delete");
+        var deleteCode = Console.ReadLine();
+        var item = _db.Products.FirstOrDefault(x => x.ProductCode == deleteCode);
+
+        if (item is not null)
+        {
+            item.ActiveFlag = false;
+            _db.Entry(item).State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("There's no Product with this Code.\n");
             Console.ForegroundColor = ConsoleColor.Blue;
         }
     }
@@ -193,7 +214,7 @@ public class Services
             var code = Console.ReadLine();
             if (string.IsNullOrEmpty(code)) continue;
 
-            var item = _db.Products.FirstOrDefault(p => p.ProductCode == code);
+            var item = _db.Products.Where(x => x.ActiveFlag == true).FirstOrDefault(p => p.ProductCode == code);
             if (item is null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -323,7 +344,7 @@ public class Services
         Console.WriteLine("\n{0,-20} {1,-20}", "TotalRevenue", "TotalProfit");
         Console.WriteLine(new string('-', 40));
 
-        foreach(SaleReport report in lst)
+        foreach (SaleReport report in lst)
         {
             TotalRevenue += report.SellingPrice * report.Quantity;
             TotalProfit += report.Profit;
