@@ -296,7 +296,7 @@ class Program
                 TotalRevenue += item.TotalAmount;
                 TotalProfit += item.Profit;
             }
-
+            Cart.Clear();
             Console.WriteLine($"Your Total Amount : ${totalPrice}");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Press Enter to Exist.");
