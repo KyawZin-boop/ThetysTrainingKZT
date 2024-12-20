@@ -48,8 +48,9 @@ public class Services
             Console.WriteLine("1. Withdraw");
             Console.WriteLine("2. Deposit");
             Console.WriteLine("3. Check Balance");
-            Console.WriteLine("4. Log Out");
-            Console.WriteLine("5. End Program");
+            Console.WriteLine("4. Check Report");
+            Console.WriteLine("5. Log Out");
+            Console.WriteLine("6. End Program");
             Console.WriteLine();
             var userInput = Console.ReadLine();
             switch (userInput)
@@ -103,21 +104,35 @@ public class Services
 
                 case "3":
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Your Current Balance = {getUser!.Balance}");
+                    Console.WriteLine($"\nYour Current Balance = {getUser!.Balance}");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.ReadLine();
                     break;
 
                 case "4":
+                    var userReport = _db.TransactionHistory.AsNoTracking().Where(x => x.UserId == getUser.UserID);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("{0,-40} {1,-10} {2,-20} {3,-15} {4,-30:C}", "TID", "Name", "Type", "Amount", "Date");
+                    Console.WriteLine(new string('-', 120));
+
+                    foreach (var report in userReport)
+                    {
+                        Console.WriteLine("{0,-40} {1,-10} {2,-20} {3,-15} {4,-30}", report.TransactionID, getUser.UserName, report.TransactionType, report.Amount, report.Date);
+                    }
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+
+                case "5":
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Log out Success!");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.ReadLine();
                     break;
 
-                case "5":
+                case "6":
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Program Ended");
+                    Console.WriteLine("Program Ended.");
                     Environment.Exit(0);
                     break;
 
@@ -128,7 +143,7 @@ public class Services
                     break;
             }
 
-            if (userInput == "4") break;
+            if (userInput == "5") break;
         }
     }
 }
