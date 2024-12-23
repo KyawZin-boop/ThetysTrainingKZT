@@ -60,54 +60,81 @@ public class Services
         var editCode = Console.ReadLine();
         var item = _db.Products.FirstOrDefault(x => x.ProductCode == editCode);
 
-        if (item is not null)
+        while (true)
         {
-            Console.Write("Enter new Name (leave blank to keep current): ");
-            string editName = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(editName)) item!.Name = editName;
 
-            Console.Write("Enter new Stock (leave blank to keep current): ");
-            string editStock = Console.ReadLine()!;
-            item!.Stock = Convert.ToInt32(editStock);
-
-            Console.Write("Enter new Price (leave blank to keep current): ");
-            string price = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(price))
+            if (item is not null)
             {
-                if (!decimal.TryParse(price, out decimal editPrice))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid Input.");
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                item!.Price = Convert.ToDecimal(editPrice);
-            }
+                Console.Write("Enter new Name (leave blank to keep current): ");
+                string editName = Console.ReadLine()!;
+                if (!string.IsNullOrEmpty(editName)) item!.Name = editName;
 
-            Console.Write("Enter new ProfitePerItem (leave blank to keep current): ");
-            string profit = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(profit))
+                Console.Write("Enter new Stock (leave blank to keep current): ");
+                string editStock = Console.ReadLine()!;
+                if (!string.IsNullOrEmpty(editStock))
+                {
+                    if (!int.TryParse(editStock, out int stock))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid Input.");
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        continue;
+                    }
+                    else
+                    {
+                        item!.Stock = stock;
+                    }
+                }
+
+                Console.Write("Enter new Price (leave blank to keep current): ");
+                string price = Console.ReadLine()!;
+                if (!string.IsNullOrEmpty(price))
+                {
+                    if (!decimal.TryParse(price, out decimal editPrice))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid Input.");
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        continue;
+                    }
+                    else
+                    {
+                        item!.Price = editPrice;
+                    }
+                }
+
+                Console.Write("Enter new ProfitePerItem (leave blank to keep current): ");
+                string profit = Console.ReadLine()!;
+                if (!string.IsNullOrEmpty(profit))
+                {
+                    if (!decimal.TryParse(profit, out decimal editProfit))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid Input.");
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        continue;
+                    }
+                    else
+                    {
+                        item!.ProfitPerItem = Convert.ToDecimal(editProfit);
+                    }
+                }
+
+                _db.Entry(item).State = EntityState.Modified;
+                _db.SaveChanges();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Edit Success.");
+                Console.ForegroundColor = ConsoleColor.Blue;
+            }
+            else
             {
-                if (!decimal.TryParse(profit, out decimal editProfit))
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid Input.");
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                item!.ProfitPerItem = Convert.ToDecimal(editProfit);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("There's no Product with this Code.\n");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                continue;
             }
-
-            _db.Entry(item).State = EntityState.Modified;
-            _db.SaveChanges();
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Edit Success.");
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("There's no Product with this Code.\n");
-            Console.ForegroundColor = ConsoleColor.Blue;
+            break;
         }
     }
 
@@ -126,58 +153,58 @@ public class Services
                     if (string.IsNullOrEmpty(newCode))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Need Product Code.");
+                        Console.WriteLine("Need Product Code.\n");
                         Console.ForegroundColor = ConsoleColor.Blue;
-                        break;
+                        continue;
                     }
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Code Exists!");
+                    Console.WriteLine("Code Exists!\n");
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    break;
+                    continue;
                 }
 
                 Console.Write("Enter the Product Name = ");
                 var newName = Console.ReadLine()!;
-                var nameCheck = _db.Products.AsNoTracking().FirstOrDefault(x => x.ProductCode == newCode);
+                var nameCheck = _db.Products.AsNoTracking().FirstOrDefault(x => x.Name == newName);
                 if (nameCheck is null)
                 {
                     if (string.IsNullOrEmpty(newName))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Need Product Name.");
+                        Console.WriteLine("Need Product Name.\n");
                         Console.ForegroundColor = ConsoleColor.Blue;
-                        break;
+                        continue;
                     }
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Product Name Exists!");
+                    Console.WriteLine("Product Name Exists!\n");
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    break;
+                    continue;
                 }
 
                 Console.Write("Enter the Product Stock = ");
                 if (!int.TryParse(Console.ReadLine(), out int newStock))
                 {
-                    Console.WriteLine("Invalid Input!");
-                    break;
+                    Console.WriteLine("Invalid Input!\n");
+                    continue;
                 }
 
                 Console.Write("Enter the Product Price = ");
                 if (!decimal.TryParse(Console.ReadLine(), out decimal newPrice))
                 {
-                    Console.WriteLine("Invalid Input!");
+                    Console.WriteLine("Invalid Input!\n");
                     break;
                 }
 
                 Console.Write("Enter the Product Profit = ");
                 if (!decimal.TryParse(Console.ReadLine(), out decimal newProfit))
                 {
-                    Console.WriteLine("Invalid Input!");
+                    Console.WriteLine("Invalid Input!\n");
                     break;
                 }
 
@@ -218,7 +245,7 @@ public class Services
             if (item is null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Product not found.");
+                Console.WriteLine("Product not found.\n");
                 Console.ForegroundColor = ConsoleColor.Blue;
                 continue;
             }
@@ -324,7 +351,7 @@ public class Services
             Console.ForegroundColor = ConsoleColor.Blue;
         }
 
-        Console.WriteLine("\n{0,-20} {1,-20} {2,-10} {3,-10} {4,-10}", "ProductCode", "Name", "Price", "Quantity", "TotalAmount");
+        Console.WriteLine("\n{0,-20} {1,-20} {2,-10} {3,-10} {4,-10}", "ProductCode", "Name", "Quantity", "Price", "Profit");
         Console.WriteLine(new string('-', 70));
         foreach (SaleReport report in lst)
         {
